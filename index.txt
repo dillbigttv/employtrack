@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>Worker Check-In</h2>
+    <button onclick="getLocation()">Check In</button>
+    <p id="status"></p>
+
+    <script>
+      function getLocation() {
+        navigator.geolocation.getCurrentPosition(success, error);
+      }
+
+      function success(pos) {
+        fetch("https://hooks.zapier.com/hooks/catch/XXXXX/XXXXX", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            worker: "John Doe",
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+            timestamp: new Date().toISOString()
+          })
+        });
+        document.getElementById("status").innerText = "Location sent!";
+      }
+
+      function error() {
+        document.getElementById("status").innerText = "Location failed.";
+      }
+    </script>
+  </body>
+</html>
